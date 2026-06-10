@@ -41,7 +41,15 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <div data-mount="header"></div>
+    <div data-mount="header"><header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-brand" href="/">
+          <span class="site-brand__title">Daily Comfort Journal</span>
+          <span class="site-brand__meta">Independent editorial content for everyday mobility and comfort.</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary"><a href="/about/">About</a><a href="/about-editorial-policy/">Editorial Policy</a><a href="/sources-methodology/">Sources &amp; Methodology</a><a href="/medical-review-policy/">Medical Review Policy</a><a href="/contact/">Contact</a></nav>
+      </div>
+    </header></div>
 
     <main id="main-content" class="page-shell">
       <section class="hero">
@@ -82,8 +90,8 @@
               loading="eager"
               fetchpriority="high"
               decoding="async"
-              width="900"
-              height="1200"
+              width="720"
+              height="960"
               src="/assets/images/hero.webp"
               alt="Older woman walking comfortably outdoors on a bright path."
             />
@@ -101,8 +109,8 @@
               data-asset="knee-image"
               loading="lazy"
               decoding="async"
-              width="1023"
-              height="682"
+              width="1200"
+              height="800"
               src="/assets/images/knee.webp"
               alt="Older adult experiencing occasional knee discomfort during daily activities."
             />
@@ -205,8 +213,8 @@
                 data-asset="stairs-image"
                 loading="lazy"
                 decoding="async"
-                width="1600"
-                height="1100"
+                width="1000"
+                height="750"
               src="/assets/images/stairs.webp"
               alt="Mature woman climbing stairs with confidence in a bright home."
               />
@@ -325,8 +333,8 @@
                 data-asset="family-image"
                 loading="lazy"
                 decoding="async"
-                width="1600"
-                height="1100"
+                width="1000"
+                height="750"
               src="/assets/images/family.webp"
               alt="Older adults spending time with family in a sunny park."
               />
@@ -441,7 +449,16 @@
       </div>
     </main>
 
-    <div data-mount="footer"></div>
+    <div data-mount="footer"><footer class="site-footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__about">
+          <p><strong>Daily Comfort Journal</strong></p>
+          <p>Independent editorial content for everyday mobility and comfort.</p>
+          <p>This website contains editorial content and may include affiliate links.</p>
+        </div>
+        <div class="legal-links" aria-label="Legal links"><a href="/privacy-policy/">Privacy Policy</a><a href="/terms/">Terms</a><a href="/about/">About</a><a href="/about-editorial-policy/">Editorial Policy</a><a href="/sources-methodology/">Sources &amp; Methodology</a><a href="/medical-review-policy/">Medical Review Policy</a><a href="/contact/">Contact</a></div>
+      </div>
+    </footer></div>
     <script type="module" src="/assets/js/pages/home.js"></script>
   </body>
 </html>
