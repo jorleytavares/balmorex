@@ -16,7 +16,9 @@ export const siteConfig = {
   organizationName: "Daily Comfort Editorial",
   tracking: {
     gtmId: "GTM-T83VG88W",
-    ga4Id: "G-1ZKG5S5X52",
+    // GA4 is managed inside the GTM container (GTM-first). Leave empty to
+    // avoid double-counting. Direct measurement ID was G-1ZKG5S5X52.
+    ga4Id: "",
   },
   imageAlt: {
     hero: "Older woman walking comfortably outdoors on a bright path.",
