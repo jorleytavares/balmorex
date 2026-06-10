@@ -1,6 +1,6 @@
 import { siteConfig } from "../content/site-content.js";
 import { renderFaqItems, renderFooter, renderHeader } from "../components/renderers.js";
-import { initAnalytics } from "../lib/analytics.js";
+import { initAnalytics, attachLinkTracking } from "../lib/analytics.js";
 import { injectHomeSchemas } from "../lib/schema.js";
 
 function resolveOfferLabel(location) {
@@ -71,7 +71,10 @@ offerLinks.forEach((link) => {
   const resolvedOfferLabel = resolveOfferLabel(link.dataset.location || "");
   link.textContent = resolvedOfferLabel.label;
   link.dataset.offerVariant = resolvedOfferLabel.variant;
+  // Safari iOS: element-level onclick prevents document-delegation interference
+  link.onclick = (e) => { e.preventDefault(); window.location.href = link.href; };
 });
 
 injectHomeSchemas();
 initAnalytics();
+attachLinkTracking(document.querySelectorAll("[data-track]"));

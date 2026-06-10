@@ -50,32 +50,34 @@ function maybeLoadTrackingScripts() {
   }
 }
 
+// Attach click tracking directly on elements instead of document delegation.
+// Safari iOS treats document-level listeners as indirect gestures; element-level
+// listeners guarantee the tap is recognized as a direct user action.
+export function attachLinkTracking(elements, articleSlug = "daily-comfort-presell") {
+  elements.forEach((el) => {
+    el.addEventListener("click", () => {
+      const eventName = el.dataset.track;
+      if (!eventName) return;
+      const payload = {
+        location: el.dataset.location || "unknown",
+        destination: el.href || "",
+        articleSlug,
+        offerVariant: el.dataset.offerVariant || undefined,
+      };
+      pushEvent(eventName, payload);
+      if (window.gtag) {
+        window.gtag("event", eventName, payload);
+      }
+    });
+  });
+}
+
 export function initAnalytics(articleSlug = "daily-comfort-presell") {
   ensureConsentBanner();
   maybeLoadTrackingScripts();
   window.addEventListener("dcj:consent", (event) => {
     if (event.detail?.value === "granted") {
       maybeLoadTrackingScripts();
-    }
-  });
-
-  document.addEventListener("click", (event) => {
-    const link = event.target.closest("[data-track]");
-    if (!link) {
-      return;
-    }
-
-    const eventName = link.dataset.track;
-    const payload = {
-      location: link.dataset.location || "unknown",
-      destination: link.href,
-      articleSlug,
-      offerVariant: link.dataset.offerVariant || undefined,
-    };
-
-    pushEvent(eventName, payload);
-    if (window.gtag) {
-      window.gtag("event", eventName, payload);
     }
   });
 
