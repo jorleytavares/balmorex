@@ -1,5 +1,5 @@
-import { siteConfig } from "../content/site-content.js";
-import { ensureConsentBanner, getConsent } from "./consent.js";
+import { siteConfig } from "../content/site-content.js?v=2";
+import { ensureConsentBanner, getConsent } from "./consent.js?v=2";
 
 const trackedScrollMilestones = new Set();
 const scrollMilestones = [25, 50, 75, 100];

@@ -1,4 +1,4 @@
-import { siteConfig } from "../content/site-content.js";
+import { siteConfig } from "../content/site-content.js?v=2";
 
 export function renderHeader(activePath) {
   const navLinks = siteConfig.navigation

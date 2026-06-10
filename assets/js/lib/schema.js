@@ -1,4 +1,4 @@
-import { siteConfig } from "../content/site-content.js";
+import { siteConfig } from "../content/site-content.js?v=2";
 
 function toAbsoluteUrl(url) {
   if (!url) return url;

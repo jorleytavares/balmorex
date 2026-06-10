@@ -1,7 +1,7 @@
-import { siteConfig } from "../content/site-content.js";
-import { renderFaqItems, renderFooter, renderHeader } from "../components/renderers.js";
-import { initAnalytics, attachLinkTracking } from "../lib/analytics.js";
-import { injectHomeSchemas } from "../lib/schema.js";
+import { siteConfig } from "../content/site-content.js?v=2";
+import { renderFaqItems, renderFooter, renderHeader } from "../components/renderers.js?v=2";
+import { initAnalytics, attachLinkTracking } from "../lib/analytics.js?v=2";
+import { injectHomeSchemas } from "../lib/schema.js?v=2";
 
 function resolveOfferLabel(location) {
   if (location === "hero") {

@@ -1,7 +1,7 @@
-import { siteConfig } from "../content/site-content.js";
-import { renderFooter, renderHeader, renderLegalContent } from "../components/renderers.js";
-import { initAnalytics } from "../lib/analytics.js";
-import { injectLegalSchemas } from "../lib/schema.js";
+import { siteConfig } from "../content/site-content.js?v=2";
+import { renderFooter, renderHeader, renderLegalContent } from "../components/renderers.js?v=2";
+import { initAnalytics } from "../lib/analytics.js?v=2";
+import { injectLegalSchemas } from "../lib/schema.js?v=2";
 
 const pageKey = document.body.dataset.page;
 const page = siteConfig.legalPages[pageKey];

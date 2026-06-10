@@ -176,7 +176,7 @@ Recent SEO updates applied:
 
 Validation:
 
-- Lighthouse mobile after updates: `SEO 100`, `Accessibility 100`, `Best Practices 100`, `Agentic Browsing 100`
+- Lighthouse mobile after updates: `SEO 100`, `Accessibility 100`, `Best Practices 100`, `Performance 99`
 
 ## Consent Banner (US) + Tracking Gate
 
@@ -197,21 +197,35 @@ This project includes a lightweight cookie/measurement banner suitable for US tr
 - Tracking gate: `assets/js/lib/analytics.js`
 - Styling: `assets/css/base.css` (search for `.cookie-banner`)
 
-## Where to Add GA4 / Google Ads Tags
+## Analytics & Tag Management (GTM-First)
 
 IDs live in:
 
 - `assets/js/content/site-content.js` → `siteConfig.tracking`
 
-Fields:
+Current values:
 
-- `gtmId`: optional (GTM container, if used)
-- `ga4Id`: GA4 Measurement ID (format `G-...`)
+- `gtmId: "GTM-T83VG88W"` — active; loaded behind consent gate
+- `ga4Id: ""` — intentionally empty; GA4 is managed **inside** GTM (GTM-first model)
+
+GTM-first model rationale:
+
+- Avoids double-counting: if both `gtmId` and `ga4Id` are non-empty, and GTM also fires a GA4 tag, every event is counted twice.
+- GA4 Measurement ID `G-1ZKG5S5X52` should be added as a GA4 Configuration tag **inside GTM**, not as `ga4Id` here.
 
 Google Ads tag:
 
-- Add as a separate config field when you provide the ID (format `AW-...`) and (if needed) conversion label.
-- It should be loaded only after consent is granted (same gate used for GA4).
+- Add as a separate field `awId` when you have the AW-... ID. Must also go through consent gate.
+
+### Required GTM Container Setup
+
+Inside GTM container `GTM-T83VG88W`, configure:
+
+1. **GA4 Configuration tag** — fires on All Pages; Measurement ID `G-1ZKG5S5X52`
+2. **cta_click event tag** — fires on Custom Event `cta_click`; variables: `location`, `destination`, `articleSlug`, `offerVariant`
+3. **dataLayer variables** — one Data Layer Variable per payload field above
+
+In GA4 Admin (`G-1ZKG5S5X52`): mark `cta_click` as a **Key event** (conversion).
 
 ## Content Optimization (v1.1)
 
@@ -272,6 +286,124 @@ Current microcopy examples:
 - CTA heading: `Ready to review the official details for this topical formula?`
 - CTA heading: `Before deciding, review the official product information directly`
 - Disclosure lead: `This page is published in an editorial format and may include affiliate links.`
+
+## Favicon (Cross-Device)
+
+A fully contextual favicon set was created using a leaf mark on brand blue `#2b6cb0`.
+
+Files added:
+
+- `favicon.ico` — 16/32/48 px multi-size ICO (browser tab + legacy)
+- `favicon.svg` — vector source, `prefers-color-scheme` aware
+- `apple-touch-icon.png` — 180×180 opaque PNG (iOS home screen)
+- `assets/icons/icon-192.png` — PWA icon 192×192
+- `assets/icons/icon-512.png` — PWA icon 512×512
+- `assets/icons/icon-512-maskable.png` — Android adaptive icon (safe-zone padding)
+- `site.webmanifest` — name, short_name, theme_color, background_color, icons array
+
+The favicon link block is present in `<head>` on all 8 HTML pages (index + 7 legal pages).
+
+## Images — Metadata & Schema
+
+All 4 editorial images now carry full metadata for SEO, accessibility, and structured data.
+
+### Metadata per image
+
+Configured in `assets/js/content/site-content.js` → `siteConfig.imageAlt`, `siteConfig.imageMeta`:
+
+| key | alt | name (schema) | caption |
+|-----|-----|---------------|---------|
+| hero | Older woman walking comfortably outdoors on a bright path | Everyday mobility — walking outdoors | Editorial image used to illustrate everyday mobility. No medical claims are implied. |
+| knee | Older adult experiencing occasional knee discomfort during daily activities | Occasional knee discomfort at home | Editorial image showing occasional knee discomfort during a familiar daily routine at home. |
+| stairs | Mature woman climbing stairs with confidence in a bright home | Climbing stairs with confidence | Readers often focus on comfort during normal tasks like using stairs. |
+| family | Older adults spending time with family in a sunny park | Active family time outdoors | Staying active often means continuing to enjoy family routines and social time. |
+
+### ImageObject schema
+
+`assets/js/lib/schema.js` → `buildImageObject(key)` — emits a full `ImageObject` node per image with `url`, `contentUrl`, `name`, `caption`, `description`. All 4 images are included in the `Article` schema `image` array.
+
+### og:image:alt / twitter:image:alt
+
+Both meta tags are now present on all 8 HTML pages for social share accessibility compliance.
+
+## Performance (Lighthouse)
+
+Baseline before this session: Performance 78, CLS 0.412, LCP 2.6s.
+**Result after fixes (PageSpeed Insights mobile, 2026-06-10): Performance 99 · Accessibility 100 · Best Practices 100 · SEO 100.**
+
+
+Fixes applied:
+
+| Issue | Root cause | Fix |
+|-------|-----------|-----|
+| CLS 0.412 | Header/footer injected by JS into empty `<div data-mount>` | Pre-rendered static header/footer HTML in all 8 pages |
+| CLS residual | stairs/family images had wrong width/height attributes (1600×1100 declared, 1216×912 actual) | Corrected to 1000×750; hero to 720×960; knee to 1200×800 |
+| LCP / image weight | hero 60 KB; knee 231 KB | Resized and recompressed: hero→36 KB, knee→53 KB; total 412 KB→164 KB |
+| No caching | No .htaccess | Added .htaccess: 1-year cache for images/fonts/icons, 7-day for CSS/JS, 1-hour for HTML |
+| No compression | No .htaccess | Added mod_deflate (gzip) for HTML/CSS/JS/SVG/JSON |
+
+Image dimensions in HTML (width × height):
+
+- hero.webp: 720 × 960
+- knee.webp: 1200 × 800
+- stairs.webp: 1000 × 750
+- family.webp: 1000 × 750
+
+The JS runtime renderer (`renderers.js`) still injects identical markup at runtime — idempotent with the pre-rendered HTML, no duplicate content.
+
+### Remaining opportunity
+
+4 CSS files are render-blocking (~530ms combined). Merging into 1 file can push Performance to 95+. Not done yet — risk/reward tradeoff for future sprint.
+
+## .htaccess (Apache)
+
+Versioned in the repo root. Applied rules:
+
+- `RedirectMatch 404 /\.git` — hides `.git` directory from public
+- `RedirectMatch 404 \.md$` — hides `.md` files (DOCUMENTATION.md, DEPLOY.md, llms.txt if .md)
+- `mod_deflate` — gzip on text/html, text/css, text/plain, application/javascript, application/json, image/svg+xml, application/manifest+json
+- `mod_expires` — 1 year for webp/png/ico/svg/woff2; 7 days for css/js; 1 hour for html
+- `mod_headers` — `Cache-Control` headers matching expires; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`
+
+**⚠️ First deploy after this change:** The server had an untracked `.htaccess` (created previously via `printf`). Remove it before pulling:
+
+```bash
+cd ~/dailycomfort.starnixon.com && rm -f .htaccess && git pull
+```
+
+Subsequent deploys use the normal `git pull`.
+
+## Deploy Workflow
+
+See `DEPLOY.md` for full details.
+
+Quick reference:
+
+```powershell
+# From the project root (Windows)
+./deploy.ps1 -Message "Your commit message"
+```
+
+Then on the cPanel SSH terminal:
+
+```bash
+cd ~/dailycomfort.starnixon.com && git pull
+```
+
+The script stages everything, commits, pushes to `main`, and prints the server command.
+
+## Structured Data — ImageObject (update)
+
+The Article schema in `index.html` (static) and `assets/js/lib/schema.js` (runtime) now includes all 4 images as `ImageObject` nodes:
+
+```json
+"image": [
+  { "@type": "ImageObject", "url": "...", "contentUrl": "...", "name": "...", "caption": "...", "description": "..." },
+  // × 4 (hero, knee, stairs, family)
+]
+```
+
+The runtime `buildHomeArticleSchema()` also includes the `author` field (Organization) to match the static HTML — a divergence that was caught and fixed.
 
 ## Local Preview
 
