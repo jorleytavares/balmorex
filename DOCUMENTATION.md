@@ -38,7 +38,7 @@ Goal:
 
 Important:
 
-- Replace the placeholder outbound URL before launching: `siteConfig.offerUrl` is still `https://example.com/official-offer`.
+- Outbound URL is LIVE: `siteConfig.offerUrl` and all 4 CTA hrefs point to the ClickBank HopLink `https://49aa24wbx42c4uc7j6ubv73v9n.hop.clickbank.net` (affiliate `jorleyst`, seller `balmorex`).
 - Track the outbound click event (`cta_click`) as the primary conversion for optimization.
 
 ### Campaign Settings (Suggested)
@@ -339,7 +339,7 @@ Fixes applied:
 | CLS 0.412 | Header/footer injected by JS into empty `<div data-mount>` | Pre-rendered static header/footer HTML in all 8 pages |
 | CLS residual | stairs/family images had wrong width/height attributes (1600×1100 declared, 1216×912 actual) | Corrected to 1000×750; hero to 720×960; knee to 1200×800 |
 | LCP / image weight | hero 60 KB; knee 231 KB | Resized and recompressed: hero→36 KB, knee→53 KB; total 412 KB→164 KB |
-| No caching | No .htaccess | Added .htaccess: 1-year cache for images/fonts/icons, 7-day for CSS/JS, 1-hour for HTML |
+| No caching | No .htaccess | Added .htaccess: 1-year cache for images/fonts/icons, 1-hour for CSS/JS (see Asset Versioning), 1-hour for HTML |
 | No compression | No .htaccess | Added mod_deflate (gzip) for HTML/CSS/JS/SVG/JSON |
 
 Image dimensions in HTML (width × height):
@@ -362,16 +362,33 @@ Versioned in the repo root. Applied rules:
 - `RedirectMatch 404 /\.git` — hides `.git` directory from public
 - `RedirectMatch 404 \.md$` — hides `.md` files (DOCUMENTATION.md, DEPLOY.md, llms.txt if .md)
 - `mod_deflate` — gzip on text/html, text/css, text/plain, application/javascript, application/json, image/svg+xml, application/manifest+json
-- `mod_expires` — 1 year for webp/png/ico/svg/woff2; 7 days for css/js; 1 hour for html
+- `mod_expires` — 1 year for webp/png/ico/svg/woff2; **1 hour for css/js** (shortened from 7 days after the stale-cache incident, see Asset Versioning); 1 hour for html
 - `mod_headers` — `Cache-Control` headers matching expires; `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`
 
-**⚠️ First deploy after this change:** The server had an untracked `.htaccess` (created previously via `printf`). Remove it before pulling:
+Note: the live host responds with `max-age=14400` (4h) for js — the host layer overrides our 1h value upward; harmless because versioned URLs make long cache safe.
 
-```bash
-cd ~/dailycomfort.starnixon.com && rm -f .htaccess && git pull
-```
+(Resolved) The server's old untracked `.htaccess` was removed with `rm -f .htaccess` before the first pull; deploys now use plain `git pull`.
 
-Subsequent deploys use the normal `git pull`.
+## Asset Versioning (Cache Busting) — REQUIRED on JS/CSS changes
+
+Assets are not fingerprinted (filenames never change), so every asset URL carries a version query — currently **`?v=2`**.
+
+Where the version appears (ALL must be bumped together when any js/css changes):
+
+- 8 HTML pages: `<link rel="stylesheet" href="/assets/css/*.css?v=2">` and `<script src="/assets/js/pages/*.js?v=2">`
+- Internal ES-module imports in: `assets/js/pages/home.js`, `assets/js/pages/legal-page.js`, `assets/js/components/renderers.js`, `assets/js/lib/analytics.js`, `assets/js/lib/schema.js` (e.g. `import ... from "../content/site-content.js?v=2"`)
+
+**Why this exists (June 2026 incident):** the original `.htaccess` cached js for 7 days. Safari kept serving a stale `site-content.js` containing the placeholder `example.com` offerUrl, and `home.js` writes `siteConfig.offerUrl` into every CTA `href` at runtime — so CTAs silently pointed to example.com even after the server was updated. Versioned URLs force a fresh download of the entire module chain; the stale cache becomes orphaned.
+
+## Safari iOS CTA Fix (June 2026)
+
+Mobile Safari was not navigating on CTA taps. Three changes fixed it (commits `deb7a24`, `a0914e1`):
+
+1. **Removed `target="_blank"`** from all 4 CTA anchors — Safari's popup heuristics could block new-tab navigation; CTAs now open in the same tab (`rel="sponsored"` kept; `noopener/noreferrer` unnecessary for same-tab)
+2. **`touch-action: manipulation`** + `cursor: pointer` + `-webkit-tap-highlight-color: transparent` on `.button-link` — removes the 300ms iOS tap delay
+3. **Element-level click handling** — replaced the `document.addEventListener("click")` delegation in `analytics.js` with `attachLinkTracking(elements)` (direct listeners per element), and each offer link gets `link.onclick = (e) => { e.preventDefault(); window.location.href = link.href; }` in `home.js`. Safari treats document-level listeners as indirect gestures; element-level handlers guarantee the tap counts as a direct user action.
+
+Verified working on iPhone Safari (private tab + normal tab after cache expiry).
 
 ## Deploy Workflow
 
