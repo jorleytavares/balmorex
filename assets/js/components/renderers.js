@@ -44,18 +44,6 @@ export function renderFooter() {
   `;
 }
 
-export function renderStickyCta() {
-  return `
-    <aside class="sticky-cta card" aria-label="Sticky call to action">
-      <div class="sticky-cta__copy">
-        <strong>Ready to review the official page?</strong>
-        <span>Check ingredients, directions, and product details on the official website.</span>
-      </div>
-      <a class="button-link" href="${siteConfig.offerUrl}" target="_blank" rel="sponsored noopener noreferrer" data-track="cta_click" data-location="sticky_mobile">${siteConfig.offerLabel}</a>
-    </aside>
-  `;
-}
-
 export function renderFaqItems(items) {
   return items
     .map(

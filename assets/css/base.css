@@ -446,30 +446,6 @@ main {
   }
 }
 
-.sticky-cta {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 60;
-  display: none;
-  align-items: center;
-  gap: 14px;
-  padding: 14px;
-  max-width: 380px;
-}
-
-.sticky-cta__copy strong {
-  display: block;
-  color: #17375d;
-  font-size: 16px;
-}
-
-.sticky-cta__copy span {
-  display: block;
-  font-size: 14px;
-  color: var(--color-secondary);
-}
-
 @media (max-width: 759px) {
   .site-header__inner,
   .site-footer__inner {
