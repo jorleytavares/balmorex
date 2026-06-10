@@ -1,0 +1,16 @@
+# Dev / IDE artifacts
+.trae/
+@vite/
+.vite/
+
+# Build output
+dist/
+node_modules/
+
+# Local review / temp artifacts
+tmp-*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

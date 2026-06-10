@@ -1,0 +1,36 @@
+# Daily Comfort Journal
+
+## Site Purpose
+
+Editorial advertorial content for older adults seeking practical information about daily comfort, mobility, and topical product research before visiting an official website.
+
+## Primary Article
+
+- [Why More Adults Are Looking for Simple Ways to Stay Active and Comfortable](https://dailycomfort.starnixon.com/)
+
+## Primary Entities
+
+- Joint comfort
+- Mobility
+- Daily activity
+- Knee discomfort
+- Muscle comfort
+- Active lifestyle
+- Topical application
+- Aging adults
+- Wellness
+
+## Content Ownership
+
+- Publisher: Daily Comfort Editorial
+
+## Canonical URLs
+
+- [Home](https://dailycomfort.starnixon.com/)
+- [About This Site](https://dailycomfort.starnixon.com/about/)
+- [About Our Editorial Policy](https://dailycomfort.starnixon.com/about-editorial-policy/)
+- [Sources and Methodology](https://dailycomfort.starnixon.com/sources-methodology/)
+- [Medical Review Policy](https://dailycomfort.starnixon.com/medical-review-policy/)
+- [Contact](https://dailycomfort.starnixon.com/contact/)
+- [Privacy Policy](https://dailycomfort.starnixon.com/privacy-policy/)
+- [Terms of Use](https://dailycomfort.starnixon.com/terms/)
