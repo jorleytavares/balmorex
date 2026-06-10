@@ -48,6 +48,19 @@ function buildBreadcrumbSchema(pathname, title) {
   };
 }
 
+function buildImageObject(key) {
+  const meta = siteConfig.imageMeta?.[key] || {};
+  const absolute = toAbsoluteUrl(siteConfig.images[key]);
+  return {
+    "@type": "ImageObject",
+    url: absolute,
+    contentUrl: absolute,
+    name: meta.name,
+    caption: meta.caption,
+    description: meta.description,
+  };
+}
+
 function buildHomeArticleSchema() {
   return {
     "@context": "https://schema.org",
@@ -66,7 +79,7 @@ function buildHomeArticleSchema() {
       name: siteConfig.organizationName,
       url: siteConfig.domain,
     },
-    image: [toAbsoluteUrl(siteConfig.images.hero), toAbsoluteUrl(siteConfig.images.family), toAbsoluteUrl(siteConfig.images.stairs)],
+    image: ["hero", "knee", "stairs", "family"].map(buildImageObject),
     about: ["Joint comfort", "Mobility", "Topical application", "Healthy aging"],
   };
 }

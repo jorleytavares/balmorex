@@ -20,13 +20,43 @@ export const siteConfig = {
   },
   imageAlt: {
     hero: "Older woman walking comfortably outdoors on a bright path.",
+    knee: "Older adult experiencing occasional knee discomfort during daily activities.",
     family: "Older adults spending time with family in a sunny park.",
     stairs: "Mature woman climbing stairs with confidence in a bright home.",
   },
   images: {
     hero: "/assets/images/hero.webp",
+    knee: "/assets/images/knee.webp",
     family: "/assets/images/family.webp",
     stairs: "/assets/images/stairs.webp",
+  },
+  // Per-image metadata: name (short title), caption (on-page figcaption) and
+  // description (fuller, keyword-aware text). Consumed by ImageObject schema.
+  imageMeta: {
+    hero: {
+      name: "Everyday mobility — walking outdoors",
+      caption: "Editorial image used to illustrate everyday mobility. No medical claims are implied.",
+      description:
+        "An older woman walking comfortably outdoors on a bright path, used editorially to illustrate everyday mobility and joint comfort for active adults.",
+    },
+    knee: {
+      name: "Occasional knee discomfort at home",
+      caption: "Editorial image showing occasional knee discomfort during a familiar daily routine at home.",
+      description:
+        "An older adult experiencing occasional knee discomfort during a daily routine at home, illustrating how joint discomfort can affect everyday activities.",
+    },
+    stairs: {
+      name: "Climbing stairs with confidence",
+      caption: "Readers often focus on comfort during normal tasks like using stairs.",
+      description:
+        "A mature woman climbing stairs with confidence in a bright home, illustrating mobility and comfort during common daily tasks.",
+    },
+    family: {
+      name: "Active family time outdoors",
+      caption: "Staying active often means continuing to enjoy family routines and social time.",
+      description:
+        "Older adults spending time with family in a sunny park, illustrating how everyday comfort supports an active lifestyle.",
+    },
   },
   navigation: [
     { href: "/about/", label: "About" },

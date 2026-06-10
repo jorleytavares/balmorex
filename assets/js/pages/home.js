@@ -35,6 +35,7 @@ const headerMount = document.querySelector('[data-mount="header"]');
 const footerMount = document.querySelector('[data-mount="footer"]');
 const faqMount = document.querySelector('[data-mount="faq"]');
 const heroImage = document.querySelector('[data-asset="hero-image"]');
+const kneeImage = document.querySelector('[data-asset="knee-image"]');
 const familyImage = document.querySelector('[data-asset="family-image"]');
 const stairsImage = document.querySelector('[data-asset="stairs-image"]');
 const canonical = document.querySelector('link[rel="canonical"]');
@@ -52,6 +53,10 @@ if (faqMount) faqMount.innerHTML = renderFaqItems(siteConfig.faq);
 if (heroImage) {
   heroImage.src = siteConfig.images.hero;
   heroImage.alt = siteConfig.imageAlt.hero;
+}
+if (kneeImage) {
+  kneeImage.src = siteConfig.images.knee;
+  kneeImage.alt = siteConfig.imageAlt.knee;
 }
 if (familyImage) {
   familyImage.src = siteConfig.images.family;
