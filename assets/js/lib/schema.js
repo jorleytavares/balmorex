@@ -56,6 +56,11 @@ function buildHomeArticleSchema() {
     description: siteConfig.articleDescription,
     inLanguage: siteConfig.locale,
     mainEntityOfPage: `${siteConfig.domain}/`,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.organizationName,
+      url: siteConfig.domain,
+    },
     publisher: {
       "@type": "Organization",
       name: siteConfig.organizationName,
