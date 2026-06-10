@@ -17,11 +17,17 @@ function pushEvent(eventName, payload = {}) {
   dataLayer.push({ event: eventName, ...payload });
 }
 
+let trackingLoaded = false;
+
 function maybeLoadTrackingScripts() {
-  if (getConsent() !== "granted") {
+  if (getConsent() !== "granted" || trackingLoaded) {
     return;
   }
+  trackingLoaded = true;
+
   if (siteConfig.tracking.gtmId) {
+    const dataLayer = ensureDataLayer();
+    dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtm.js?id=${siteConfig.tracking.gtmId}`;

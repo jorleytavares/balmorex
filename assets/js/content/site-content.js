@@ -15,7 +15,7 @@ export const siteConfig = {
   ],
   organizationName: "Daily Comfort Editorial",
   tracking: {
-    gtmId: "",
+    gtmId: "GTM-T83VG88W",
     ga4Id: "G-1ZKG5S5X52",
   },
   imageAlt: {
