@@ -7,7 +7,7 @@ export const siteConfig = {
   articleTitle: "When Joint Or Muscle Discomfort Starts Affecting Everyday Activities",
   articleDescription:
     "Many adults experience occasional knee, back, or joint discomfort that can make everyday activities feel more challenging. As a result, interest in topical comfort solutions continues to grow.",
-  offerUrl: "https://example.com/official-offer",
+  offerUrl: "https://49aa24wbx42c4uc7j6ubv73v9n.hop.clickbank.net",
   offerLabel: "Learn More About This Topical Formula",
   offerLabelVariants: [
     "See Official Product Details",
