@@ -189,6 +189,9 @@ main {
   color: #fff;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 10px 22px rgba(47, 133, 90, 0.2);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
