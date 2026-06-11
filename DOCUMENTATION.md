@@ -422,6 +422,23 @@ The Article schema in `index.html` (static) and `assets/js/lib/schema.js` (runti
 
 The runtime `buildHomeArticleSchema()` also includes the `author` field (Organization) to match the static HTML — a divergence that was caught and fixed.
 
+## Code Audit (June 2026)
+
+Comprehensive audit of all JavaScript and CSS to identify unused or orphaned code.
+
+**Result:** One orphaned function and its CSS were removed:
+- `renderStickyCta()` in `assets/js/components/renderers.js` — exported but never called (always `display: none` in CSS, never rendered)
+- `.sticky-cta` and sub-selectors in `assets/css/base.css` — CSS for unmounted component (~200 bytes, 36 lines)
+
+**Reason:** all pages use pre-rendered static HTML (header, footer) instead of runtime component injection. The sticky CTA component was a remnant from an earlier design pattern.
+
+**After cleanup:**
+- 7 JavaScript files: 100% of code is used
+- No orphaned exports
+- No dead CSS
+
+See commit `114abaa` (Cleanup: remove orphaned renderStickyCta function and unused CSS).
+
 ## Local Preview
 
 Use your existing local server (Vite preview/dev) and open:
